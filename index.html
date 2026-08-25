@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ===== EDIT THESE THREE LINES when you fill in your real details ===== -->
+<title>Your Name</title>
+<meta name="description" content="Personal academic website of Your Name, Placeholder Position at Placeholder University.">
+<meta name="author" content="Your Name">
+<!-- ==================================================================== -->
+
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Your Name">
+<meta property="og:description" content="Personal academic website of Your Name, Placeholder Position at Placeholder University.">
+<meta name="twitter:card" content="summary">
+<meta name="color-scheme" content="light dark">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232f6fed'/><text x='50' y='70' font-size='58' font-family='Georgia,serif' fill='white' text-anchor='middle'>A</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- Applied before first paint so a dark-mode reload doesn't flash white. -->
+<script>
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Your Name",
+  "jobTitle": "Placeholder Position",
+  "affiliation": { "@type": "Organization", "name": "Placeholder University" }
+}
+</script>
+</head>
+
+<body>
+
+<!--
+  ============================================================================
+  You should not need to edit this file to change content — all of it comes
+  from the files in content/. The only reason to touch index.html is to ADD or
+  REMOVE A TAB, which means adding or removing one <section data-route="...">
+  block below (and the matching line in content/site.js). See README.md.
+  ============================================================================
+-->
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<noscript>
+  <div class="noscript-note">
+    <h1>Your Name</h1>
+    <p>Placeholder Position, Department of Placeholder, Placeholder University.</p>
+    <p>This site needs JavaScript to display its content.
+       You can reach me at <a href="mailto:you@example.edu">you@example.edu</a>.</p>
+  </div>
+</noscript>
+
+<div class="layout">
+
+  <!-- ===================== Sidebar (filled by JS) ===================== -->
+  <header class="sidebar" id="sidebar">
+    <div class="sidebar-inner">
+
+      <div class="identity">
+        <img class="avatar" id="avatar" alt="" width="160" height="160">
+        <h1 class="identity-name" id="identity-name"></h1>
+        <p class="identity-title" id="identity-title"></p>
+        <p class="identity-affil" id="identity-affil"></p>
+      </div>
+
+      <nav class="nav" id="nav" aria-label="Sections"></nav>
+
+      <ul class="links" id="links"></ul>
+
+      <div class="sidebar-foot">
+        <button class="theme-toggle" id="theme-toggle" type="button"
+                aria-label="Switch colour theme">
+          <span class="theme-toggle-icon" aria-hidden="true"></span>
+          <span class="theme-toggle-label" id="theme-toggle-label">Auto</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ===================== Content panels ===================== -->
+  <main class="content" id="main">
+
+    <!-- To add a tab, copy one of these blocks, change data-route, and add a
+         matching { route, label } line to `nav` in content/site.js. -->
+
+    <section class="panel" data-route="home" tabindex="-1" aria-labelledby="home-h">
+      <h2 class="panel-title" id="home-h">About</h2>
+      <div id="home-body"></div>
+    </section>
+
+    <section class="panel" data-route="publications" tabindex="-1" aria-labelledby="pubs-h">
+      <h2 class="panel-title" id="pubs-h">Publications</h2>
+      <div id="pubs-body"></div>
+    </section>
+
+    <section class="panel" data-route="software" tabindex="-1" aria-labelledby="soft-h">
+      <h2 class="panel-title" id="soft-h">Software</h2>
+      <div id="software-body"></div>
+    </section>
+
+    <section class="panel" data-route="teaching" tabindex="-1" aria-labelledby="teach-h">
+      <h2 class="panel-title" id="teach-h">Teaching</h2>
+      <div id="teaching-body"></div>
+    </section>
+
+    <section class="panel" data-route="cv" tabindex="-1" aria-labelledby="cv-h">
+      <h2 class="panel-title" id="cv-h">Curriculum Vitae</h2>
+      <div id="cv-body"></div>
+    </section>
+
+    <footer class="site-foot" id="site-foot"></footer>
+
+  </main>
+
+</div>
+
+<!-- Content first, then code. -->
+<script src="content/site.js"></script>
+<script src="content/software.js"></script>
+<script src="content/teaching.js"></script>
+<script src="content/cv.js"></script>
+
+<script src="assets/js/bibtex.js"></script>
+<script src="assets/js/render.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>
