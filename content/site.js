@@ -11,71 +11,60 @@ window.SITE = {
 
   /* --- Sidebar identity ------------------------------------------------- */
 
-  name: "Your Name",
-  title: "Placeholder Position",
-  affiliation: "Department of Placeholder, Placeholder University",
+  name: "Alex Shaffer",
+  title: "Doctoral Candidate",
+  affiliation: "School of Computing, University of Illinois Urbana-Champaign",
 
-  // Swap in your own photo: drop it in assets/img/ and point to it here.
-  // e.g. "assets/img/portrait.jpg"
-  avatar: "assets/img/avatar.svg",
+  // Swap in your own photo: drop it in files/ and point to it here.
+  // e.g. "files/portrait.jpg"
+  avatar: "files/headshot.JPG",
 
   /* --- Sidebar links ---------------------------------------------------- */
   // Order is the order they appear. Delete any you don't want.
   // `icon` picks the little glyph — available icons are listed in README.md.
   links: [
-    { label: "Email",           href: "mailto:you@example.edu",              icon: "mail" },
-    { label: "Google Scholar",  href: "https://scholar.google.com/",         icon: "scholar" },
-    { label: "GitHub",          href: "https://github.com/",                 icon: "github" },
-    { label: "arXiv",           href: "https://arxiv.org/a/placeholder",     icon: "arxiv" },
-    { label: "ORCID",           href: "https://orcid.org/0000-0000-0000-0000", icon: "orcid" },
+    // Showing the address as the label makes it copy-pasteable. Any link whose
+    // href starts with "mailto:" also gets a copy-to-clipboard button.
+    { label: "aws9@illinois.edu", href: "mailto:aws9@illinois.edu",       icon: "mail" },
+    { label: "Google Scholar",  href: "https://scholar.google.com/citations?user=0okiGmwAAAAJ&hl=en&oi=sra",         icon: "scholar" },
+    { label: "GitHub",          href: "https://github.com/redhorn144",                 icon: "github" },
     { label: "CV (PDF)",        href: "files/cv.pdf",                        icon: "file" }
   ],
 
   /* --- Home tab --------------------------------------------------------- */
 
   // Short line under your name on the Home tab. Keep it to one sentence.
-  tagline: "One-sentence summary of what you work on and why it matters.",
+  tagline: "High Order methods for PDEs, Scientific Computing, and Numerical Analysis",
 
   // Separate paragraphs with a blank line.
   bio: `
-    Placeholder biography paragraph. Describe your research programme in plain
-    language: the questions you care about, the methods you use, and the kinds
-    of problems you like to work on. Two or three sentences is plenty here.
+    I work with high order numerical methods to solve partial differential equations (PDEs).
+    My research focuses on developing these method as well as leveraging them to solve challening 
+    problems such as the incompressible Navier-Stokes equations and the incompressible magnetohydrodynamics (MHD) equations. 
+    I work on meshless methods such as radial basis function (RBF) pseudo-spectral methods.
+    I also use spectral element methods to study the incompressible Navier-Stokes equations and the incompressible MHD equations.
+    Simulations of these equations have applications in fluid dynamics, geophysics, fusion energy, and much more.
 
-    A second placeholder paragraph. This is a good place for your background —
-    where you trained, where you've worked, and anything else a visitor should
-    know before they email you.
-
-    A third, optional paragraph. Mention that you're recruiting students, open
-    to collaboration, or whatever else you want people to act on.
+    I recieved an undergraduate degree in Physics from the University of Illinois Urbana-Champaign in 2025. I then joined the School of Computing at the University of Illinois Urbana-Champaign to pursue a PhD in Computer Science. 
+    I currently work with Prof. Paul Fischer and Prof. Luke Olson.
   `,
 
   // Each interest becomes a card on the Home tab.
   // `blurb` is optional — delete it and you get just the heading.
   interests: [
     {
-      title: "First Research Interest",
-      blurb: "One or two sentences on what this area covers and what you contribute to it."
+      title: "Meshless High Order Methods",
+      blurb: "Radial basis function (RBF) methods are a class of meshless methods that may be used to solve PDEs. I specialize in pseudo-spectral RBF methods, specifically the least-squares RBF partition of unity method (RBF-PUM). I work on parallel implementations of this method including iterative solvers and preconditioners."
     },
     {
-      title: "Second Research Interest",
-      blurb: "Placeholder description of a second thread of your research programme."
-    },
-    {
-      title: "Third Research Interest",
-      blurb: "Placeholder description of a third thread of your research programme."
-    },
-    {
-      title: "Fourth Research Interest",
-      blurb: "Placeholder description. Add or remove entries freely — the grid reflows."
+      title: "Spectral Element Methods",
+      blurb: "Spectral element methods use high order polynomials to efficiently solve PDEs at scale. I work with Nek5000 and NekRS to solve the incompressible Navier-Stokes equations and the incompressible magnetohydrodynamics (MHD) equations with applications in fluid dynamics, geophysics, and fusion energy."
     }
   ],
 
   // Short news items on the Home tab. Set to [] to hide the section entirely.
   news: [
-    { date: "2026-06", text: "Placeholder news item — a paper accepted, a talk given, an award." },
-    { date: "2026-03", text: "Placeholder news item — new preprint posted to arXiv." },
-    { date: "2025-11", text: "Placeholder news item — started a new position." }
+    
   ],
 
   /* --- Publications tab ------------------------------------------------- */
@@ -92,6 +81,7 @@ window.SITE = {
   // in index.html and give it the same route name. See README.md.
   nav: [
     { route: "home",         label: "Home" },
+    { route: "gallery",      label: "Gallery" },
     { route: "publications", label: "Publications" },
     { route: "software",     label: "Software" },
     { route: "teaching",     label: "Teaching" },

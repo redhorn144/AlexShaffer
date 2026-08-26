@@ -7,8 +7,33 @@
    ========================================================================== */
 
 window.SOFTWARE = [
-
   {
+    name: "lazyfit",
+
+    // One or two sentences. What is it, and who is it for?
+    blurb: `A small python package that performs radial basis function (RBF) interpolation and optimizes over basis function and shape parameter.`,
+
+    // Small tags under the title. Language, ecosystem, domain — whatever helps.
+    tags: ["Python", "RBF", "Interpolation"],
+
+    // Optional status pill. Suggested values: "Active", "Maintained",
+    // "Archived", "Beta". Delete the line to show no pill.
+    status: "Active",
+
+    // Buttons. Delete any you don't have.
+    links: [
+      { label: "GitHub",        href: "https://github.com/redhorn144/lazyfit" },
+      { label: "PyPI",          href: "https://pypi.org/project/lazyfit/" }
+    ],
+
+    // Optional one-line install/usage snippet shown in a code box.
+    code: "pip install lazyfit"
+  }
+];
+
+
+/*
+{
     name: "placeholder-package",
 
     // One or two sentences. What is it, and who is it for?
@@ -56,4 +81,4 @@ window.SOFTWARE = [
     ]
   }
 
-];
+*/

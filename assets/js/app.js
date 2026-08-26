@@ -36,6 +36,10 @@
     var label = (S.nav || []).filter(function (t) { return t.route === route; })[0];
     document.title = (label && route !== HOME ? label.label + " · " : "") + (S.name || "");
 
+    // Don't leave a hidden tab's video decoding frames. Clips that are still
+    // on screen are restarted by the IntersectionObserver in media.js.
+    if (window.Media) Media.pauseAll();
+
     if (!isInitial) {
       // Move focus to the new panel so keyboard and screen-reader users land
       // in the right place, then scroll back to the top of the page.
@@ -81,6 +85,10 @@
     Render.software(window.SOFTWARE);
     Render.teaching(window.TEACHING);
     Render.cv(window.CV);
+
+    // Render.home() leaves an empty #home-rail for the clips to mount into.
+    Media.rail(document.getElementById("home-rail"), Media.featured());
+    Media.gallery(document.getElementById("gallery-body"), window.MEDIA);
 
     var toggle = document.getElementById("theme-toggle");
     applyTheme(readTheme());

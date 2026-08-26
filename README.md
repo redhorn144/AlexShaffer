@@ -47,13 +47,60 @@ redeploys it — there's no build to wait on.
 | Bio, research interests, news items | `content/site.js` |
 | Which tabs exist and their order | `content/site.js` (the `nav` list) |
 | Publications | `content/publications.bib` |
+| Simulation clips (Home rail + Gallery tab) | `content/media.js` |
 | Software projects | `content/software.js` |
 | Courses | `content/teaching.js` |
-| CV timeline and PDF link | `content/cv.js` |
+| Which PDF the CV tab links to | `content/cv.js` |
 | Colours and fonts | `assets/css/style.css` (section 1 only) |
 | Page title, description, social preview | `index.html` (top of the file) |
 
 PDFs, slides and your CV go in `files/`. Photos go in `assets/img/`.
+
+### Simulation clips
+
+`content/media.js` drives two places at once: entries marked `featured: true`
+appear in the sticky rail on the Home tab, and every entry appears on the
+Gallery tab with its longer `description`.
+
+Each entry is either a video or an image:
+
+```js
+{
+  id: "channel-flow",                       // must be unique
+  title: "Turbulent Channel Flow",
+  caption: "Spectral element DNS · Nek5000",
+  mp4:    "files/media/channel-flow.mp4",   // video: this is the required one
+  webm:   "files/media/channel-flow.webm",  //        optional, smaller
+  poster: "files/media/channel-flow.jpg",   //        shown while loading
+  alt:    "Vorticity isosurfaces in a turbulent channel flow",
+  featured: true,
+  description: `Longer text, Gallery tab only.`
+}
+```
+
+Use `image: "files/media/figure.png"` instead of the `mp4`/`webm` pair for a
+still figure. The site ships with animated SVG placeholders so you can see the
+layout before your clips are ready.
+
+**[files/media/README.md](files/media/README.md) has the ffmpeg commands** that
+produce web-ready files, and explains why each flag matters. Read it before
+adding your first clip — video committed to git stays in the repository history
+permanently, so it's worth getting the file size right the first time.
+
+Clips are muted and loop automatically. Only clips actually on screen play; the
+rest stay paused so the page doesn't chew through CPU and bandwidth. If a visitor
+has "reduce motion" enabled, nothing autoplays.
+
+### The CV tab
+
+Save your CV as `files/cv.pdf` and the tab is done — it shows View and Download
+buttons plus an inline preview of the file. Until that file exists, the tab says
+so rather than showing an empty box.
+
+To point at a different filename or an external URL, change `pdf` in
+`content/cv.js`. To drop the inline preview and show only the buttons, set
+`embed: false` there. The preview is hidden on phones regardless, since mobile
+browsers handle embedded PDFs badly.
 
 ### A note on quotes
 
@@ -161,18 +208,28 @@ index.html          page shell; the empty <section> per tab
 content/            ← everything you edit
   site.js             identity, bio, interests, news, links, nav
   publications.bib    BibTeX
+  media.js            simulation clips
   software.js         project cards
   teaching.js         course list
-  cv.js               CV timeline
+  cv.js               path to your CV PDF
 
 assets/
   css/style.css     design tokens first, then layout and components
   js/bibtex.js      BibTeX parser and LaTeX→Unicode conversion
   js/render.js      builds the HTML for each tab
+  js/media.js       clip player, thumbnails, lightbox
   js/app.js         tab routing, theme toggle, boot
+  img/sim-*.svg     animated placeholders, replace with real clips
 
 files/              PDFs: CV, papers, slides
+  media/            simulation clips (see its README for encoding)
 ```
+
+Two content widths are in play, set at the top of `assets/css/style.css`:
+`--measure` (42rem) keeps running text at a readable line length, while
+`--wide` (78rem) lets grids, clips and the CV preview use the screen. The
+Publications tab is deliberately pinned narrower than the rest — citations are
+easier to scan that way.
 
 Tabs are switched client-side using the URL hash (`#/publications`), so links to
 a specific tab work and the back button behaves normally.

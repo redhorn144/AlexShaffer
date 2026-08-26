@@ -55,7 +55,12 @@
     orcid:  FILLED + '<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM8.2 17.1H6.9V8.6h1.3v8.5zM7.5 7.5a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zm4 9.6h-1.3V8.6h3.2c2.6 0 4 1.8 4 4.3s-1.6 4.2-4 4.2h-1.9zm0-7.3v6.1h1.7c1.9 0 2.8-1.3 2.8-3s-.8-3.1-2.8-3.1h-1.7z"/></svg>',
     linkedin: FILLED + '<path d="M4.5 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM2.8 9.3h3.4v11.2H2.8zM9.3 9.3h3.3v1.5c.5-.9 1.7-1.8 3.4-1.8 3 0 4.2 1.8 4.2 5v6.5h-3.4v-5.9c0-1.6-.6-2.5-1.9-2.5s-2.2 1-2.2 2.5v5.9H9.3z"/></svg>',
     bluesky: FILLED + '<path d="M12 10.4C10.9 8.3 7.9 4.4 5.2 2.5 2.6.7 1.6 1 1 1.3.2 1.7 0 2.9 0 3.6c0 .7.4 5.8.7 6.7.8 2.8 3.8 3.8 6.6 3.5h.4c-2.8.4-5.3 1.5-2 5.2 3.5 3.8 4.8-.8 5.5-3.2.7 2.4 1.5 6.9 5.4 3.2 3-3.2.8-4.7-2-5.2h.4c2.8.3 5.8-.7 6.6-3.5.3-.9.7-6 .7-6.7 0-.7-.2-1.9-1-2.3-.6-.3-1.6-.6-4.2 1.2-2.7 1.9-5.7 5.8-6.8 7.9z"/></svg>',
-    twitter: FILLED + '<path d="M17.7 3h3.3l-7.2 8.2L22 21h-6.6l-5.2-6.7L4.3 21H1l7.7-8.8L1.3 3H8l4.7 6.2zm-1.2 16h1.8L7.6 4.8H5.7z"/></svg>'
+    twitter: FILLED + '<path d="M17.7 3h3.3l-7.2 8.2L22 21h-6.6l-5.2-6.7L4.3 21H1l7.7-8.8L1.3 3H8l4.7 6.2zm-1.2 16h1.8L7.6 4.8H5.7z"/></svg>',
+    copy:   STROKE + '<rect x="9" y="9" width="12.5" height="12.5" rx="2"/><path d="M5.5 15H4.5a2 2 0 0 1-2-2V4.5a2 2 0 0 1 2-2H13a2 2 0 0 1 2 2v1"/></svg>',
+    check:  STROKE + '<path d="m4.5 12.5 5 5 10-11"/></svg>',
+    expand: STROKE + '<path d="M9 3.5H3.5V9M15 3.5h5.5V9M9 20.5H3.5V15M15 20.5h5.5V15"/></svg>',
+    play:   STROKE + '<path d="M7 4.5v15l13-7.5z"/></svg>',
+    close:  STROKE + '<path d="M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg>'
   };
 
   function icon(name) {
@@ -78,15 +83,75 @@
              esc(t.label) + "</a>";
     }).join("");
 
-    document.getElementById("links").innerHTML = (S.links || []).map(function (l) {
-      var ext = /^https?:/i.test(l.href || "");
-      return "<li><a href=" + '"' + esc(l.href) + '"' +
-             (ext ? ' target="_blank" rel="noopener"' : "") + ">" +
-             icon(l.icon) + "<span>" + esc(l.label) + "</span></a></li>";
+    var linkBox = document.getElementById("links");
+
+    linkBox.innerHTML = (S.links || []).map(function (l) {
+      var href = l.href || "";
+      var ext = /^https?:/i.test(href);
+      var mail = /^mailto:/i.test(href);
+
+      var h = "<li>" +
+        '<a href="' + esc(href) + '"' + (ext ? ' target="_blank" rel="noopener"' : "") + ">" +
+        icon(l.icon) + "<span>" + esc(l.label) + "</span></a>";
+
+      // Selecting text inside a link is fiddly (browsers start a drag), so
+      // mailto: entries get an explicit copy button.
+      if (mail) {
+        h += '<button class="copy-btn" type="button" ' +
+             'data-copy="' + esc(href.replace(/^mailto:/i, "")) + '" ' +
+             'aria-label="Copy email address" title="Copy email address">' +
+             icon("copy") + "</button>";
+      }
+      return h + "</li>";
     }).join("");
+
+    linkBox.addEventListener("click", function (ev) {
+      var b = ev.target.closest("[data-copy]");
+      if (!b) return;
+      ev.preventDefault();
+      copyText(b.dataset.copy, b);
+    });
 
     document.getElementById("site-foot").innerHTML = prose(S.footer || "");
     document.title = S.name || document.title;
+  }
+
+  // Copy `text`, flipping `btn` to a tick for a moment as confirmation.
+  function copyText(text, btn) {
+    function ok() {
+      var original = btn.innerHTML;
+      btn.innerHTML = icon("check");
+      btn.classList.add("copied");
+      btn.setAttribute("title", "Copied");
+      setTimeout(function () {
+        btn.innerHTML = original;
+        btn.classList.remove("copied");
+        btn.setAttribute("title", "Copy email address");
+      }, 1500);
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, legacy);
+    } else {
+      legacy();
+    }
+
+    // Clipboard API needs a secure context; plain http://localhost is fine but
+    // a bare http:// host is not, so keep the old path available.
+    function legacy() {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        ok();
+      } catch (e) { /* nothing more we can do; the address is visible anyway */ }
+    }
   }
 
   /* -- home --------------------------------------------------------------- */
@@ -114,7 +179,13 @@
       h += "</ul>";
     }
 
-    document.getElementById("home-body").innerHTML = h;
+    // Two columns on wide screens: text left, simulation clips right.
+    // app.js fills #home-rail via Media.rail() once every script has loaded.
+    document.getElementById("home-body").innerHTML =
+      '<div class="home-grid">' +
+        '<div class="home-main">' + h + "</div>" +
+        '<aside class="home-rail" id="home-rail" aria-label="Simulation clips"></aside>' +
+      "</div>";
   }
 
   /* -- publications ------------------------------------------------------- */
@@ -157,9 +228,16 @@
 
       case "inproceedings":
       case "conference":
-        if (f.booktitle) bits.push("In " + em(f.booktitle));
+        // Google Scholar and some institutional exporters emit `conference`
+        // where BibTeX proper wants `booktitle`; accept either.
+        var proc = f.booktitle || f.conference;
+        if (proc) bits.push("In " + em(proc));
+        if (f.series) bits.push(esc(D(f.series)));
         if (f.pages) bits.push("pp. " + esc(D(f.pages)));
         if (f.address) bits.push(esc(D(f.address)));
+        if (f.publisher || f.organization) {
+          bits.push(esc(D(f.publisher || f.organization)));
+        }
         break;
 
       case "incollection":
@@ -192,7 +270,7 @@
 
       default:
         if (f.journal) bits.push(em(f.journal));
-        if (f.booktitle) bits.push("In " + em(f.booktitle));
+        if (f.booktitle || f.conference) bits.push("In " + em(f.booktitle || f.conference));
         if (f.howpublished) bits.push(esc(D(f.howpublished)));
     }
 
@@ -207,23 +285,24 @@
   }
 
   function actionsHTML(e) {
-    var f = e.fields, D = BibTeX.decode, out = [];
+    // P, not decode: these are addresses, not prose. See BibTeX.plain.
+    var f = e.fields, P = BibTeX.plain, out = [];
     function btn(href, label) {
       out.push('<a class="btn" href="' + esc(href) + '" target="_blank" rel="noopener">' +
                esc(label) + "</a>");
     }
 
-    if (f.pdf) btn(D(f.pdf), "PDF");
-    if (f.doi) btn("https://doi.org/" + D(f.doi).replace(/^https?:\/\/doi\.org\//i, ""), "DOI");
+    if (f.pdf) btn(P(f.pdf), "PDF");
+    if (f.doi) btn("https://doi.org/" + P(f.doi).replace(/^https?:\/\/doi\.org\//i, ""), "DOI");
     if (f.eprint || f.arxiv) {
-      var id = D(f.eprint || f.arxiv);
+      var id = P(f.eprint || f.arxiv);
       btn(/^https?:/i.test(id) ? id : "https://arxiv.org/abs/" + id, "arXiv");
     }
-    if (f.url) btn(D(f.url), "Link");
-    if (f.code) btn(D(f.code), "Code");
-    if (f.slides) btn(D(f.slides), "Slides");
-    if (f.video) btn(D(f.video), "Video");
-    if (f.poster) btn(D(f.poster), "Poster");
+    if (f.url) btn(P(f.url), "Link");
+    if (f.code) btn(P(f.code), "Code");
+    if (f.slides) btn(P(f.slides), "Slides");
+    if (f.video) btn(P(f.video), "Video");
+    if (f.poster) btn(P(f.poster), "Poster");
 
     out.push('<button class="btn" type="button" data-bib="' + esc(e.key) + '">BibTeX</button>');
     return '<div class="pub-actions">' + out.join("") + "</div>";
@@ -440,30 +519,51 @@
 
   function cv(data) {
     var body = document.getElementById("cv-body");
-    if (!data || !data.sections || !data.sections.length) {
-      body.innerHTML = '<p class="empty">No CV details listed yet.</p>';
+
+    if (!data || !data.pdf) {
+      body.innerHTML = '<p class="empty">No CV linked yet. Add one by setting ' +
+                       '<code>pdf</code> in <code>content/cv.js</code>.</p>';
       return;
     }
 
+    var href = esc(data.pdf);
     var h = "";
-    if (data.pdf) {
-      h += '<div class="cv-top"><a class="btn" href="' + esc(data.pdf) +
-           '" target="_blank" rel="noopener">' + icon("file") + " Download full CV (PDF)</a></div>";
-    }
+
     if (data.note) h += '<p class="cv-note">' + prose(data.note) + "</p>";
 
-    data.sections.forEach(function (sec) {
-      h += '<h3 class="section-head">' + esc(sec.heading) + "</h3>";
-      h += (sec.items || []).map(function (it) {
-        var s = '<div class="cv-item"><div class="cv-when">' + esc(it.when || "") + "</div><div>";
-        s += '<div class="cv-what">' + esc(it.what || "") + "</div>";
-        if (it.where) s += '<div class="cv-where">' + esc(it.where) + "</div>";
-        if (it.detail) s += '<div class="cv-detail">' + prose(it.detail) + "</div>";
-        return s + "</div></div>";
-      }).join("");
-    });
+    h += '<div class="cv-actions">' +
+           '<a class="btn btn-lead" href="' + href + '" target="_blank" rel="noopener">' +
+             icon("file") + " View CV (PDF)</a>" +
+           '<a class="btn" href="' + href + '" download>Download</a>' +
+           (data.updated ? '<span class="cv-updated">Updated ' + esc(data.updated) + "</span>" : "") +
+         "</div>";
+
+    if (data.embed !== false) {
+      h += '<div class="cv-frame-wrap" id="cv-frame-wrap">' +
+             '<iframe class="cv-frame" src="' + href + '#view=FitH" ' +
+                     'title="Curriculum vitae"></iframe>' +
+           "</div>" +
+           '<p class="cv-small">The preview is hidden on small screens — ' +
+             'use the buttons above to open the PDF.</p>';
+    }
 
     body.innerHTML = h;
+
+    // If the file isn't there yet, say so plainly instead of showing an
+    // empty grey box. file:// can't be probed, so skip the check there.
+    if (location.protocol !== "file:" && /^(?!https?:)/i.test(data.pdf)) {
+      fetch(data.pdf, { method: "HEAD" })
+        .then(function (r) { if (!r.ok) throw new Error(String(r.status)); })
+        .catch(function () {
+          var wrap = document.getElementById("cv-frame-wrap");
+          var msg = '<p class="empty">No PDF at <code>' + href + '</code> yet — ' +
+                    "save your CV there and it will appear here.</p>";
+          if (wrap) wrap.innerHTML = msg;
+          else body.insertAdjacentHTML("beforeend", msg);
+          var small = body.querySelector(".cv-small");
+          if (small) small.remove();
+        });
+    }
   }
 
   global.Render = {
@@ -475,7 +575,8 @@
     teaching: teaching,
     cv: cv,
     icon: icon,
-    esc: esc
+    esc: esc,
+    prose: prose
   };
 
 })(window);

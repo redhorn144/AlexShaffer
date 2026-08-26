@@ -15,6 +15,23 @@ window.TEACHING = [
 
   {
     group: "Instructor of Record",
+    title: "Cryptography",
+    institution: "Academy High School",
+    term: "Fall 2024",
+    blurb: "This was an elective course introducing high school students to topics in cryptography. The course covered topics from linear algebra and number theory, along with basic ciphers, modern asymmetric techniques, and an introduction to quantum computing.",
+    links: [
+      { label: "Course site", href: "https://redhorn144.github.io/AHCryptography/" }
+    ]
+  },
+
+  {
+    group: "Teaching Assistant",
+    title: "CS 450 - Numerical Analysis",
+    institution: "University of Illinois Urbana-Champaign",
+    term: "Fall 2026"
+  }
+  /*{
+    group: "Instructor of Record",
     title: "PLC 401 — A Placeholder Advanced Course",
     institution: "Placeholder University",
     term: "Spring 2026",
@@ -49,6 +66,6 @@ window.TEACHING = [
     links: [
       { label: "Materials", href: "https://github.com/" }
     ]
-  }
+  }*/
 
 ];

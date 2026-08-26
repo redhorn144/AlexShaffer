@@ -102,6 +102,19 @@
     return s.normalize ? s.normalize("NFC") : s;
   }
 
+  // For URLs, DOIs and arXiv ids. These must NOT go through decode(): it would
+  // turn "--" in a DOI into an en dash and "~" in a URL into a space.
+  // Braces and LaTeX escapes still have to come off, and BibTeX exporters wrap
+  // long URLs across lines, so whitespace goes too.
+  function plain(s) {
+    if (s == null) return "";
+    return String(s)
+      .replace(/\\([{}%&_#$])/g, "$1")
+      .replace(/[{}]/g, "")
+      .replace(/\s*[\r\n]\s*/g, "")  // rejoin URLs the exporter wrapped
+      .trim();                       // but keep spaces inside a local filename
+  }
+
   /* -- Low-level readers -------------------------------------------------- */
 
   function BibError(msg) { this.message = msg; }
@@ -397,6 +410,6 @@
     return { entries: entries, errors: errors };
   }
 
-  global.BibTeX = { parse: parse, decode: decode };
+  global.BibTeX = { parse: parse, decode: decode, plain: plain };
 
 })(window);

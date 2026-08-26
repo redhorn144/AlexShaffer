@@ -99,6 +99,11 @@
       <div id="home-body"></div>
     </section>
 
+    <section class="panel" data-route="gallery" tabindex="-1" aria-labelledby="gallery-h">
+      <h2 class="panel-title" id="gallery-h">Gallery</h2>
+      <div id="gallery-body"></div>
+    </section>
+
     <section class="panel" data-route="publications" tabindex="-1" aria-labelledby="pubs-h">
       <h2 class="panel-title" id="pubs-h">Publications</h2>
       <div id="pubs-body"></div>
@@ -130,9 +135,12 @@
 <script src="content/software.js"></script>
 <script src="content/teaching.js"></script>
 <script src="content/cv.js"></script>
+<script src="content/media.js"></script>
 
+<!-- render.js must come before media.js — media.js borrows its helpers. -->
 <script src="assets/js/bibtex.js"></script>
 <script src="assets/js/render.js"></script>
+<script src="assets/js/media.js"></script>
 <script src="assets/js/app.js"></script>
 
 </body>
