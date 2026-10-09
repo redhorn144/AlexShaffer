@@ -125,30 +125,7 @@ window.MEDIA = [
                   (the modal filter).
                   <a href="https://doi.org/10.1007/978-0-387-72067-8">DOI</a>`
   },
-
-  {
-    id: "spectral-advect",
-    title: "LeVeque's Swirling Deformation Test",
-    caption: "Pure advection on the spectral solver · N = 160 · 1.7% round-trip error",
-    mp4: "files/media/spectral_advect.mp4",
-    poster: "files/media/spectral_advect.jpg",
-    aspect: "1 / 1",
-    alt: "A white disc on black being wound into a thin spiral filament by a swirling flow, then unwound back to a disc",
-    description: `The advection operator on its own. A cosine bell is carried by a
-                  prescribed swirling flow that winds it into a spiral filament and then
-                  reverses at half time, so a perfect scheme returns the initial blob
-                  exactly. The spectral solver brings it back to within 1.7% in L² at
-                  N = 160, with 1.5× the classic deformation. Two details mattered: the
-                  swirl amplitude is sampled at frame midpoints, so the forward and
-                  reversed halves cancel exactly, and the filament has to stay resolved or
-                  the modal filter truncates it irreversibly.
-                  <br><br>
-                  R. J. LeVeque, “High-Resolution Conservative Algorithms for Advection in
-                  Incompressible Flow,” <em>SIAM Journal on Numerical Analysis</em>,
-                  33(2):627–665, 1996.
-                  <a href="https://doi.org/10.1137/0733033">DOI</a>`
-  },
-
+  
   {
     id: "fft-ocean",
     title: "FFT Ocean",

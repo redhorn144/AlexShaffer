@@ -9,9 +9,7 @@ window.TEACHING = [
 
   // Optional paragraph at the top of the tab. Delete the whole `intro` entry
   // (the object with `intro:`) if you don't want one.
-  { intro: `A placeholder sentence about your teaching philosophy or the kinds
-            of courses you enjoy teaching. Keep it short — the list below does
-            most of the work.` },
+  //{ intro: `` },
 
   {
     group: "Instructor of Record",
